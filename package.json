@@ -17,12 +17,14 @@
   "license": "ISC",
   "dependencies": {
     "@genezio/types": "^1.0.20",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/lodash": "^4.17.16",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",
     "drizzle-zod": "^0.7.0",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "pg": "^8.14.0",
     "zod": "^3.24.2"
