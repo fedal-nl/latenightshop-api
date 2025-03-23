@@ -4,13 +4,25 @@ import { createUsersSchema, loginUsersSchema, usersTable } from  "../../db/schem
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
+const secret = process.env.JWT_SECRET!
 
-async function comparePassword(plainPassword: String, hashedPassword: any) {
-    return await bcrypt.compare(plainPassword, hashedPassword);
+function generateJWToken(userId: number, userRole: string, expires: string='1d') {
+    // responsable for generating a JWToken. Takes the userId and userRole with an optional param for
+    // the expiration of the token. default is 300 seconds.
+
+    const token = jwt.sign(
+        {
+            userId: userId, 
+            role: userRole
+        },
+        secret, 
+        { expiresIn: expires }
+    )
+    return token;
 }
-
 
 // registration router uses the createdUserSchema validator
 router.post('/register', validateData(createUsersSchema), async (req, res) => {
@@ -26,7 +38,9 @@ router.post('/register', validateData(createUsersSchema), async (req, res) => {
         // if the user is successfully created, do not return the hashed password
         const {password, ...createdUser} = user;
         // return 200 and the created user without the passowrd
-        res.status(200).send({user: createdUser});
+        // generate a token and return it in the response
+        const token = generateJWToken(user.id, user.role);
+        res.status(201).json({token, createdUser});
     } catch (error) {
         res.status(500).send({message: error.message});
     }
@@ -57,8 +71,14 @@ router.post('/login', validateData(loginUsersSchema), async (req, res) => {
 
         delete user.password;
         // return 200 and the created user without the passowrd
+        // USER LOGGED IN, GENERATE A TOKEN
+        const token = generateJWToken(user.id, user.role);
+        console.log(`New toke ${token}`);
 
-        res.status(200).json({ user });
+        res.status(200).json({ token, user });
+        
+        
+
     } catch (error){
         res.status(500).json({error: error.message});
 
