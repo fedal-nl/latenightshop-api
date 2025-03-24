@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { listProducts, getProduct, createProduct, updateProduct, deleteProduct } from "./productController";
-import { validateData } from "../../middlewares/validators";
-import { createProductsSchema, updateProductsSchema } from  "../../db/schemas/product";
-import { verifyAuthentication, verifyAuthorization } from "../..//middlewares/auth";
+import { listProducts, getProduct, createProduct, updateProduct, deleteProduct } from "./productController.js";
+import { validateData } from "../../middlewares/validators.js";
+import { createProductsSchema, updateProductsSchema } from  "../../db/schemas/product.js";
+import { verifyAuthentication, verifyAuthorization } from "../..//middlewares/auth.js";
 
 const router = Router()
 

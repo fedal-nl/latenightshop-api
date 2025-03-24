@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { db } from "../../db";
-import { productsTable } from "../../db/schemas/product";
+import { db } from "../../db/index.js";
+import { productsTable } from "../../db/schemas/product.js";
 import { eq } from "drizzle-orm";
 
 export async function listProducts(req: Request, res: Response) {
@@ -20,7 +20,7 @@ export async function getProduct(req: Request, res: Response) {
         const product_id = req.params["id"];
         console.log(`product_id => ${product_id}`);
         console.log(req.params)
-        const [product] = await db.select().from(productsTable).where(eq(productsTable.id, product_id))
+        const [product] = await db.select().from(productsTable).where(eq(productsTable.id, Number(product_id)))
         if (!product) {
           res.status(404).send({message: "Product not found"});
         } else {
@@ -51,7 +51,7 @@ export async function updateProduct(req: Request, res: Response) {
     console.log(req.params)
     console.log(updatedFields);
     try {
-        const [result] = await db.update(productsTable).set(updatedFields).where(eq(productsTable.id, product_id)).returning();
+        const [result] = await db.update(productsTable).set(updatedFields!).where(eq(productsTable.id, Number(product_id))).returning();
         if (result) {
             res.status(200).json(result)
             console.log("updated product result: ", result);
@@ -59,7 +59,7 @@ export async function updateProduct(req: Request, res: Response) {
             res.status(404).send({message: `Product with ${product_id} is not found`})
         }
     } catch (error) {
-            res.status(500).send({error: `${error.message}`})
+            res.status(500).send({error: `${error!}`})
     }
 }
 
@@ -68,14 +68,14 @@ export async function deleteProduct(req: Request, res: Response) {
     console.log(`product_id => ${product_id}`);
     console.log(req.params)
     try {
-        const result = await db.delete(productsTable).where(eq(productsTable.id, product_id))
+        const result = await db.delete(productsTable).where(eq(productsTable.id, Number(product_id)))
         if (result) {
             res.status(204).send({message: `Product ${product_id} is deleted`});
         } else {
             res.status(404).send({message: "Product not found"});        
         }    
     } catch(error) {
-        res.status(500).send({message: `ERROR: ${error.message}`})
+        res.status(500).send({message: `ERROR: ${error!}`})
     }
 
 }

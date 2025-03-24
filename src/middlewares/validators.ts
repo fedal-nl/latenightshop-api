@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { z, ZodError } from "zod";
-import { createProductsSchema } from "../db/schemas/product"
 import _ from "lodash";
 
 
