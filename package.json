@@ -24,6 +24,7 @@
     "drizzle-orm": "^0.34.1",
     "drizzle-zod": "^0.5.1",
     "express": "^4.21.2",
+    "genezio": "^3.2.5",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "pg": "^8.14.0",
