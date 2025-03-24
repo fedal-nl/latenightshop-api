@@ -5,7 +5,7 @@ declare global {
     namespace Express {
         export interface Request {
             userId?: number;
-            filteredParams?: Object;
+            filteredParams?: any;
         }
     }
 }

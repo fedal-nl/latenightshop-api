@@ -1,6 +1,6 @@
 import express from 'express';
-import productRouter from './routes/products/index';
-import authRouter from './routes/auth/index';
+import productRouter from './routes/products/index.js';
+import authRouter from './routes/auth/index.js';
 
 const port = 3000
 const app = express()

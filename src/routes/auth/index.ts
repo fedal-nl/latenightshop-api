@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
 const router = Router();
 const secret = process.env.JWT_SECRET!
 
+
 function generateJWToken(userId: number, userRole: string, expires: string='1d') {
     // responsable for generating a JWToken. Takes the userId and userRole with an optional param for
     // the expiration of the token. default is 300 seconds.
@@ -19,7 +20,7 @@ function generateJWToken(userId: number, userRole: string, expires: string='1d')
             role: userRole
         },
         secret, 
-        { expiresIn: expires }
+        { expiresIn: expires } as jwt.SignOptions
     )
     return token;
 }
@@ -42,7 +43,7 @@ router.post('/register', validateData(createUsersSchema), async (req, res) => {
         const token = generateJWToken(user.id, user.role);
         res.status(201).json({token, createdUser});
     } catch (error) {
-        res.status(500).send({message: error.message});
+        res.status(500).send({message: error});
     }
 })
 
@@ -69,7 +70,7 @@ router.post('/login', validateData(loginUsersSchema), async (req, res) => {
             return;
         }
 
-        delete user.password;
+        delete (user as any).password;
         // return 200 and the created user without the passowrd
         // USER LOGGED IN, GENERATE A TOKEN
         const token = generateJWToken(user.id, user.role);
@@ -80,7 +81,7 @@ router.post('/login', validateData(loginUsersSchema), async (req, res) => {
         
 
     } catch (error){
-        res.status(500).json({error: error.message});
+        res.status(500).json({error: error});
 
     }
 } )
