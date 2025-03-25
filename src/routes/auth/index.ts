@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validateData } from "../../middlewares/validators.js";
 import { createUsersSchema, loginUsersSchema, usersTable } from  "../../db/schemas/user.js";
-import { db } from "../../db";
+import { db } from "../../db/index.js";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
