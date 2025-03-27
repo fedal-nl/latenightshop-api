@@ -26,9 +26,10 @@ export async function getOrderById(req: Request, res: Response){
         const orderId = parseInt(req.params.id);
         const orderItems = await db.select().from(ordersTable).leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId)).where(eq(ordersTable.id, orderId));
         console.log("order items for orderId: ", orderId, " => ", orderItems);
-        
+                
         // destruct the orderItems to show only the order object with a list of item objects.
-        const orderWithItems = { ...orderItems[0].orders, items: orderItems.map((item) => item.order_items)};
+        // TODO: first need to check if order has items before assuming there is one
+	const orderWithItems = { ...orderItems[0].orders, items: orderItems.map((item) => item.order_items)};
         console.log("OrderWithItems: => ", orderWithItems);
 
         res.status(200).json(orderWithItems);
@@ -50,7 +51,7 @@ export async function updateOrder(req: Request, res: Response){
         const [result] = await db.update(ordersTable).set(reqData).where(eq(ordersTable.id, orderId)).returning()
 
         console.log("update result: ", result)
-        res.status(201).json(result);
+        res.status(200).json(result);
     } catch (error) {
         console.log(error);
         res.status(500).send({error: error});
@@ -63,7 +64,7 @@ export async function createOrder(req: Request, res: Response){
         const {order, items} = req.filteredParams;
         const orderData = {userId: Number(req.userId)}
 
-        // first insert the order and get back the oriderId back
+        // first insert the order and get back the orderId back
         const [ createdOrder ] = await db.insert(ordersTable).values(orderData).returning();
         
         // use the orderId to insert the orderItems after creating the orderItems object.
