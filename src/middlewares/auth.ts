@@ -21,10 +21,12 @@ export function verifyAuthentication(req: Request, res: Response, next: NextFunc
     }
 
     try {
-        // verify the token using the secret.
+        // verified that the token is valid and using the secret. add the userId and role to the request and continue.
         console.log(`Verifying token ${token} and secret: ${secret}`)
-        const decodedToken = jwt.verify(token, secret);
+        const decodedToken = jwt.verify(token, secret) as DecodedToken;;
         console.log(`decodedToken => ${JSON.stringify(decodedToken, null, 4)}`)
+        req.userId = decodedToken.userId;
+        req.role = decodedToken.role;
         next()
 
     } catch (error) {
@@ -51,7 +53,9 @@ export function verifyAuthorization(req: Request, res: Response, next: NextFunct
         if (!authorized_roles!.includes(decodedToken.role)) {
             res.status(403).json({ error: 'Forbidden. You are not allowed to access this API'})
         }
-        // if the user is autherized, continue
+        // if the user is autherized pass the userId and role to the request and continue
+        req.userId = decodedToken.userId;
+        req.role = decodedToken.role;
         next()
     } catch (error) {
         console.log(`Error authorization: ${error}`);

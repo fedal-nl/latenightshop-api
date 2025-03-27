@@ -8,5 +8,3 @@ export default defineConfig({
     url: process.env.DATABASE_URL!,
   }
 })
-
-// npx drizzle-kit push
