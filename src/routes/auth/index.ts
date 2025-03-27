@@ -56,7 +56,6 @@ router.post('/login', validateData(loginUsersSchema), async (req, res) => {
     // this why we don't need to search by the email and the hashedpassword.
     try {
         const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
-        console.log("user found => ", user);
         if (!user) {
             res.status(401).json({error: 'Authentication failed'});
             return;

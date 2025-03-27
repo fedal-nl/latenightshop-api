@@ -2,7 +2,13 @@ version: '3.8'
 
 services:
   thelatenight-api:
+    container_name: express-api
     image: thenightshop-api 
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+      - .env:/app/.env
     ports:
       - "3000:3000"
     env_file:
