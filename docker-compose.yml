@@ -3,7 +3,8 @@ version: '3.8'
 services:
   thelatenight-api:
     container_name: express-api
-    image: thenightshop-api 
+    build: .
+    image: thelatenightshop-api 
     volumes:
       - type: bind
         source: .
