@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import productRouter from './routes/products/index.js';
 import authRouter from './routes/auth/index.js';
 import orderRouter from './routes/orders/index.js';
@@ -8,6 +9,10 @@ const app = express()
 
 app.use(express.urlencoded({ extended: true}))
 app.use(express.json());
+app.use(cors({
+    origin: "*",
+    credentials: true
+}));
 
 app.use('/products', productRouter);
 app.use('/auth', authRouter);
