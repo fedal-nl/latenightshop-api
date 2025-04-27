@@ -1,0 +1,1 @@
+ALTER TABLE "categories" ALTER COLUMN "updated_at" TYPE timestamp USING "updated_at"::timestamp;

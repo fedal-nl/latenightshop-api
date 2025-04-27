@@ -11,14 +11,14 @@ Define the db tables, schemas for the api validations and responses.
 export const ordersTable = pgTable('orders', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     status: varchar({ length: 50 }).notNull().default('New'),
-    userId: integer().references(() => usersTable.id).notNull(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    user_id: integer().references(() => usersTable.id).notNull(),
+    created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const orderItemsTable = pgTable('order_items', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    orderId: integer().references(() => ordersTable.id).notNull(),
-    productId: integer().references(() => productsTable.id).notNull(),
+    order_id: integer().references(() => ordersTable.id).notNull(),
+    product_id: integer().references(() => productsTable.id).notNull(),
     quantity: integer().notNull(),
     price: doublePrecision().notNull(),
     created_at: timestamp('created_at').notNull().defaultNow()
@@ -29,15 +29,15 @@ export const createOrdersSchema = createInsertSchema(ordersTable).omit(
     {
         id: true, 
         status: true, 
-        userId: true,
-        createdAt: true
+        user_id: true,
+        created_at: true
     });
 
 // specific create schema for the ordersItems
 export const createOrderItemsSchema = createInsertSchema(orderItemsTable).omit(
     {
         id: true,
-        orderId: true,
+        order_id: true,
         created_at: true,
 
     })
