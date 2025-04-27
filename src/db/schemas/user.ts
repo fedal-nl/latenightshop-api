@@ -8,7 +8,7 @@ export const usersTable = pgTable("users", {
   name: varchar({ length: 255 }).notNull(),
   role: varchar({ length: 255 }).notNull().default('user'),
   address: text(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
 // will be used for the validation

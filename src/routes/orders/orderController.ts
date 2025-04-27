@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { db } from "../../db/index.js";
-import { ConsoleLogWriter, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { orderItemsTable, ordersTable } from "../../db/schemas/orders.js";
 
 /*
@@ -24,7 +24,7 @@ export async function getOrderById(req: Request, res: Response){
     try {
         console.log("request params => ", req.params);
         const orderId = parseInt(req.params.id);
-        const orderItems = await db.select().from(ordersTable).leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId)).where(eq(ordersTable.id, orderId));
+        const orderItems = await db.select().from(ordersTable).leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.order_id)).where(eq(ordersTable.id, orderId));
         console.log("order items for orderId: ", orderId, " => ", orderItems);
                 
         // destruct the orderItems to show only the order object with a list of item objects.
@@ -62,7 +62,7 @@ export async function createOrder(req: Request, res: Response){
     try {
         // destruct the req data
         const {order, items} = req.filteredParams;
-        const orderData = {userId: Number(req.userId)}
+        const orderData = {user_id: Number(req.userId)}
 
         // first insert the order and get back the orderId back
         const [ createdOrder ] = await db.insert(ordersTable).values(orderData).returning();
@@ -70,7 +70,7 @@ export async function createOrder(req: Request, res: Response){
         // use the orderId to insert the orderItems after creating the orderItems object.
         const orderItems = items.map((item: any) => ({
             ...item,
-            orderId: createdOrder.id,
+            order_id: createdOrder.id,
         }));
         console.log("orderItems to be inserted: ", orderItems);
 

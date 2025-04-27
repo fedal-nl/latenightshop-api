@@ -15,6 +15,34 @@
       "when": 1743000054849,
       "tag": "0001_safe_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1745524429539,
+      "tag": "0002_worried_galactus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1745524755920,
+      "tag": "0003_fantastic_pete_wisdom",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1745784150157,
+      "tag": "0004_nervous_baron_strucker",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1745786609388,
+      "tag": "0005_needy_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }

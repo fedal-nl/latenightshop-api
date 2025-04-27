@@ -40,9 +40,12 @@ export function verifyAuthorization(req: Request, res: Response, next: NextFunct
     // It will check if the role of the user matches the authorized path role.
     const token = req.header('authorization');
     const path = req.baseUrl;
-    const authorized_roles = {
+    // TODO: MOVE THIS TO A CONFIG FILE
+    const authorized_roles = { 
         '/products': ['user', 'admin'],
-        '/orders': ['user', 'admin', 'sales']
+        '/orders': ['user', 'admin', 'sales'],
+        '/categories': ['admin', 'user'],
+        '/users': ['admin'],
     }[path];
     console.log(`path to be accessed: ${path} and authorized_roles: ${authorized_roles}`);
 
