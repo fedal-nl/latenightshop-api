@@ -8,7 +8,7 @@ export const categoriesTable = pgTable("categories", {
   description: text(),
   image_url: varchar({ length: 255 }),
   created_at: timestamp("created_at").notNull().defaultNow(),
-  updated_at: varchar({ length: 255 }),
+  updated_at: timestamp("updated_at"),
   is_active: boolean().notNull().default(true),
 });
 // will be used for the validation
