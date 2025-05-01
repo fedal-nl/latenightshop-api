@@ -7,8 +7,8 @@ import { createCategory, getCategoryById, listCategories, updateCategory, delete
 
 const router = Router();
 router.post('/', verifyAuthentication, verifyAuthorization, validateData(createCategoriesSchema), createCategory);
-router.get('/', verifyAuthentication, verifyAuthorization, listCategories);
-router.get('/:id', verifyAuthentication, verifyAuthorization, getCategoryById);
+router.get('/', listCategories);
+router.get('/:id', getCategoryById);
 router.put('/:id',  verifyAuthentication, verifyAuthorization, validateData(updateCategoriesSchema), updateCategory)
 router.delete('/:id', verifyAuthentication, verifyAuthorization, deleteCategory )
 
