@@ -10,6 +10,6 @@ router.get('/', listProducts);
 router.get('/:id', getProduct);
 router.post('/', verifyAuthentication, verifyAuthorization, validateData(createProductsSchema), createProduct);
 router.patch('/:id', validateData(updateProductsSchema), updateProduct);
-router.delete('/:id', deleteProduct)
+router.delete('/:id', verifyAuthentication, verifyAuthorization, deleteProduct)
 
 export default router;
