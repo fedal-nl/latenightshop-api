@@ -63,7 +63,7 @@ export async function createPaymentIntent(req: Request, res: Response) {
 export async function getPublishableKey(req: Request, res: Response) {
     // return the publishable key 
     try {
-        res.status(200).json({ publishablekey: publishableKey });
+        res.status(200).json({ publishableKey: publishableKey });
     } catch (error) {
         console.error('Error getting key:', error);
         res.status(500).json({ error: 'Failed to get publishable key' });
