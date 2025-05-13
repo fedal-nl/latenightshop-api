@@ -5,7 +5,7 @@ import { createPaymentIntent, getPublishableKey } from "./stripeController.js";
 
 const router = Router();
 
-router.get('/key', getPublishableKey);
-router.post('/createPaymentIntent', createPaymentIntent);
+router.get('/publishable-key', getPublishableKey);
+router.post('/payment-sheet', createPaymentIntent);
 
 export default router;

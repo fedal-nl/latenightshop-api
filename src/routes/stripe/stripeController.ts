@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 
 const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY; // Replace with your Stripe publishable key
 const secretKey = process.env.STRIPE_SECRET_KEY; // Replace with your Stripe secret key
-const currency = 'eur'; // You can change this to your desired currency
+// const currency = 'eur'; // You can change this to your desired currency
 
 if (!secretKey) {
     throw new Error('Stripe secret key is not defined in the environment variables');
@@ -15,12 +15,6 @@ if (!publishableKey) {
 // create a stripeclient by initializing the Stripe object with the secret key
 // The secret key is used to authenticate requests to the Stripe API and perform operations such as creating payment intents, managing customers, etc.
 const stripe = new Stripe(secretKey);
-const customer = await stripe.customers.create();
-
-const ephemeralKey = await stripe.ephemeralKeys.create(
-    { customer: customer.id }, // Replace with the actual customer ID
-    { apiVersion: '2024-09-30.acacia' } // Replace with the desired API version
-);
 
 // create a new PaymentIntent for a stripe payment. 
 // A PaymentIntent tracks the customer’s payment lifecycle, keeping track of any failed payment attempts
@@ -28,10 +22,26 @@ const ephemeralKey = await stripe.ephemeralKeys.create(
 // Return the PaymentIntent’s client secret in the response to finish the payment on the client.
 export async function createPaymentIntent(req: Request, res: Response) {
 
-    const { amount } = req.body;
-    console.log('amount received: ', amount);
+    const { amount, email, name, currency } = req.body;
+    console.log('amount, customer eaail and name received: ', amount, email, name, currency);
 
     try {
+        // Create a new customer. This is optional, but it's a good practice to create a customer for each user.
+        // This allows you to save payment methods and manage subscriptions.
+        // You can also use an existing customer ID if you have one.
+        const customer = await stripe.customers.create({
+            email: email, // Replace with the actual email from the request
+            name: name, // Replace with the actual name from the request
+            description: 'Customer for payment intent test', // Optional description
+        });
+
+        // Information on the Customer object is sensitive, and can’t be retrieved directly from an app. 
+        // An Ephemeral Key grants the SDK temporary access to the Customer
+        const ephemeralKey = await stripe.ephemeralKeys.create(
+            { customer: customer.id }, // Replace with the actual customer ID
+            { apiVersion: '2025-04-30.basil' } // Replace with the desired API version
+        );
+
         const paymentIntent = await stripe.paymentIntents.create({
             amount,
             currency,
@@ -43,11 +53,10 @@ export async function createPaymentIntent(req: Request, res: Response) {
 
         res.status(200).json(
             { 
-                clientSecret: paymentIntent.client_secret,
+                paymentIntent: paymentIntent.client_secret,
                 ephemeralKey: ephemeralKey.secret,
                 customer: customer.id,
-                publishableKey: publishableKey,
-                paymentIntent: paymentIntent.id
+                publishableKey: publishableKey
             }
     );
     } catch (error) {
