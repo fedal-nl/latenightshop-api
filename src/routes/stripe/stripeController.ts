@@ -23,7 +23,7 @@ const stripe = new Stripe(secretKey);
 export async function createPaymentIntent(req: Request, res: Response) {
 
     const { amount, email, name, currency } = req.body;
-    console.log('amount, customer eaail and name received: ', amount, email, name, currency);
+    console.log('amount, customer email and name received: ', amount, email, name, currency);
 
     try {
         // Create a new customer. This is optional, but it's a good practice to create a customer for each user.
